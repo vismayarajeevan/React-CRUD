@@ -4,6 +4,7 @@ import './Employee.css'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
+import CircularProgress from '@mui/material/CircularProgress'; // Import Material-UI CircularProgress
 
 const Employee = () => {
 
@@ -33,13 +34,22 @@ const Employee = () => {
     }))
   }
 
+
+  // state for submit loading
+  const [loadingSubmit , setLoadingSubmit] =useState(false)
+
   // function to save data
   const handleSubmit=async(e)=>{
     e.preventDefault();
+  
     console.log(formData);
     if(editMode){
+      
       updateDetails(editId,formData)
+      
     }else{
+      setLoadingSubmit(true)
+
       try{
         const response = await axios.post('https://crud-demo-nodejs.onrender.com/api/create',formData)
         console.log(response.data.data);
@@ -52,7 +62,7 @@ const Employee = () => {
       }   
     }
     
-      
+    setLoadingSubmit(false)   
   }
 
 
@@ -66,24 +76,30 @@ const Employee = () => {
       job:'',
     })
   }
-
+ 
+  // state for shimmereffect
+const [employeeLoading, setEmployeeLoading] =useState(false)
 
 // /function to display data
 
 const displayEmployeeDetails = async()=>{
+  setEmployeeLoading(true)
   try {
     const display = await axios.get('https://crud-demo-nodejs.onrender.com/api/employees')
     console.log(display.data);
       if(display.status>=200 && display.status<300){
          setEmployee(display.data.data)
+
        }else{
           console.log("Failed");     
        }
     
    } catch (error) {
     console.log(error);   
+    
    }
-  
+
+   setEmployeeLoading(false)
 }
 
 
@@ -111,6 +127,7 @@ const deleteCard =async(id)=>{
 // function to edit data
 
 const updateDetails =async(id,updateData)=>{
+
  try {
   const edit = await axios.put(`https://crud-demo-nodejs.onrender.com/api/employees/${id}`,updateData)
   console.log(edit.data.data);
@@ -124,6 +141,7 @@ const updateDetails =async(id,updateData)=>{
   console.log(error);
   
  }
+
 }
 
 // editID
@@ -201,7 +219,15 @@ useEffect(()=>{
                   
                   <div className='btn1'>
                     
-                    <button className='btnSub' type='submit' onClick={handleSubmit}>Submit</button>
+                    <button className='btnSub' type='submit' onClick={handleSubmit}>
+                      {
+                        loadingSubmit?(
+                          <CircularProgress size={24} style={{ color: '#fff' }} />
+                        ) : (
+                          'Submit'
+                        )
+                      }
+                    </button>
                     <button className='btnCan' onClick={clearForm}>Cancel</button>
                     
                   </div>
@@ -210,8 +236,21 @@ useEffect(()=>{
          </div>
   
         <div className='details'>
+        {employeeLoading ? (
+          <div className="allDetails">
+            {Array(5)
+              .fill(0)
+              .map((_, index) => (
+                <div key={index} className="contact shimmer-contact">
+                  <div className="shimmer-item" style={{ width: '60%' }}></div>
+                  <div className="shimmer-item" style={{ width: '40%' }}></div>
+                  <div className="shimmer-item" style={{ width: '50%' }}></div>
+                </div>
+              ))}
+          </div>
 
-          {
+        ) :
+          
             employee.length>0?(
               <div  className='allDetails'>
                 {
@@ -226,21 +265,26 @@ useEffect(()=>{
                 <div className='contact-actions'>
                 <button className='btn editBtn' onClick={()=>fillDataToForm(emp._id)}><i class="fas fa-edit"></i></button>
                 <button className='btn deleteBtn ms-3' onClick={()=>deleteCard(emp._id)}><i class="fa-solid fa-trash"></i></button>
+
                 </div>
                  </div>
                   ))
-                }
+              }
              
             </div>
             )
             :
+            (
             <p>No Employees found.</p>
+            )
           }
              
   
             
   
         </div>
+
+
     </div>
 
 

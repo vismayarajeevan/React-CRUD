@@ -285,6 +285,48 @@ select{
     }
     
 }
+
+
+
+
+/* Shimmer effect */
+.shimmer {
+    animation: shimmer 1.5s infinite linear;
+    background: linear-gradient(
+      to right,
+      #f0f0f0 0%,
+      #e0e0e0 20%,
+      #f0f0f0 40%,
+      #f0f0f0 100%
+    );
+    background-size: 200% 100%;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  
+  /* Shimmer item styles */
+  .shimmer-item {
+    height: 20px;
+    margin: 10px 0;
+    border-radius: 4px;
+  }
+  
+  /* Shimmer for each contact */
+  .shimmer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+  }
+  
+  
   
 @media (max-width: 760px){
     .head h1{
