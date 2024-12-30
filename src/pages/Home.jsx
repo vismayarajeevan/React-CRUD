@@ -1,42 +1,30 @@
 import React, { useEffect, useState } from 'react'
 
 import './Home.css'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
 
+import { useLocation} from 'react-router-dom'
 
 
 const Home = () => {
 
-  const {id} =useParams()  // useParams is used to extract employee id directlt from url
-  const [employee, setEmployee] =useState(null)  //state to hold employee details
 
-  useEffect(()=>{
-   const displayEmployeeDetails = async()=>{
-    try {
-      console.log(`Fetching details for employee ID: ${id}`);
+  const location = useLocation();  //to access the data 
+  
 
-      const response = await axios.get(`https://crud-demo-nodejs.onrender.com/api/employees`)
-      console.log(response.data.data);
-      
-      if(response.status>=200 && response.status<300){
-        setEmployee(response.data.data)
-      }else{
-         console.log("Failed to fetch employee details");
-         
-      }
-      
-    } catch (error) {
-      console.log(error);
-      
-    }
-   }
+  const employee = location.state?.homeEmployeeParameter;
+  console.log(employee);
+ 
+  // Redirect to a default page or show a fallback message if employee data is missing
+  if (!employee) {
+    return (
+      <div>
+        <p>Employee details not found.</p>
+        
+      </div>
+    );
 
-   displayEmployeeDetails()
-  },[id])
 
-  if(!employee){
-    return <p>Loading employee details...</p>
+  
   }
 
   return (

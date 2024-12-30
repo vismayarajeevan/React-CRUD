@@ -217,7 +217,8 @@ useEffect(()=>{
                 {
                   employee.map((emp)=>(
                  <div key={emp._id} className='contact'>
-                      <Link to={`/home/${emp._id}`} className='contacts'>
+                
+                    <Link to={{ pathname: `/home/${emp._id}`}} state={{ homeEmployeeParameter: emp }} className='contacts'>
                     <p>Name: {emp.name}</p>
                     <p>Phone number: {emp.phoneNumber}</p>
                 </Link>
