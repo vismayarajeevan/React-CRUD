@@ -39,16 +39,19 @@ const Employee = () => {
   const [loadingSubmit , setLoadingSubmit] =useState(false)
 
   // function to save data
+
   const handleSubmit=async(e)=>{
     e.preventDefault();
-  
+
+    setLoadingSubmit(true)
     console.log(formData);
+     
     if(editMode){
-      
+        
       updateDetails(editId,formData)
       
     }else{
-      setLoadingSubmit(true)
+      
 
       try{
         const response = await axios.post('https://crud-demo-nodejs.onrender.com/api/create',formData)
@@ -60,9 +63,11 @@ const Employee = () => {
              console.log(error);
              
       }   
+      
+      setLoadingSubmit(false)
     }
     
-    setLoadingSubmit(false)   
+    
   }
 
 
@@ -76,6 +81,7 @@ const Employee = () => {
       job:'',
     })
   }
+
  
   // state for shimmereffect
 const [employeeLoading, setEmployeeLoading] =useState(false)
@@ -127,7 +133,8 @@ const deleteCard =async(id)=>{
 // function to edit data
 
 const updateDetails =async(id,updateData)=>{
-
+    
+    
  try {
   const edit = await axios.put(`https://crud-demo-nodejs.onrender.com/api/employees/${id}`,updateData)
   console.log(edit.data.data);
@@ -135,14 +142,16 @@ const updateDetails =async(id,updateData)=>{
     alert(edit.data.message)
     displayEmployeeDetails()
     clearForm()
+    setEditMode(false)
   }
   
  } catch (error) {
   console.log(error);
   
  }
-
+ setLoadingSubmit(false)
 }
+
 
 // editID
 const fillDataToForm =(id)=>{
@@ -224,7 +233,7 @@ useEffect(()=>{
                         loadingSubmit?(
                           <CircularProgress size={24} style={{ color: '#fff' }} />
                         ) : (
-                          'Submit'
+                          editMode ? "Update" : "Submit"
                         )
                       }
                     </button>
@@ -236,10 +245,10 @@ useEffect(()=>{
          </div>
   
         <div className='details'>
-        {employeeLoading ? (
+        {employeeLoading ==false? (
           <div className="allDetails">
             {Array(5)
-              .fill(0)
+              .fill()
               .map((_, index) => (
                 <div key={index} className="contact shimmer-contact">
                   <div className="shimmer-item" style={{ width: '60%' }}></div>
