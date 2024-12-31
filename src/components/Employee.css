@@ -292,6 +292,9 @@ select{
 /* ********************Responsive design********************** */
 
 @media (max-width: 1280px){
+    .main{
+        height: auto;
+    }
     .container{
         width: 90%;
     }
@@ -302,6 +305,10 @@ select{
 
   
 @media (max-width: 760px){
+
+    .main{
+        height: auto;
+    }
     .head h1{
         font-size: 28px;
     }

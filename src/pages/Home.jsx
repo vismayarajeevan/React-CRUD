@@ -33,11 +33,11 @@ const Home = () => {
             <div className='contact-card'>
                 <h3>{employee.name}</h3>
                 <div className='contact-info'>
-                     <p><strong>Phone number:</strong> <span>{employee.phoneNumber}</span></p>
-                     <p><strong>Gender:</strong> <span>{employee.gender}</span></p>
-                     <p><strong>Marital status:</strong> <span>{employee.maritalStatus}</span></p>
-                     <p><strong>Age:</strong> <span>{employee.age}</span></p>
-                     <p><strong>Job:</strong> <span>{employee.job}</span></p>
+                     <p className='para'><strong>Phone number:</strong> <span>{employee.phoneNumber}</span></p>
+                     <p className='para'><strong>Gender:</strong> <span>{employee.gender}</span></p>
+                     <p className='para'><strong>Marital status:</strong> <span>{employee.maritalStatus}</span></p>
+                     <p className='para'><strong>Age:</strong> <span>{employee.age}</span></p>
+                     <p className='para'><strong>Job:</strong> <span>{employee.job}</span></p>
                 </div>
             </div>
         </div>
