@@ -24,6 +24,14 @@ const Employee = () => {
   const [editMode, setEditMode]=useState(false)  // to set editmode
   const [editId, setEditId]=useState(null)  //to get editid 
 
+  // state to vaidate inputs. Initially set as object beacause we need to validate multiple input fields 
+
+  const [errors, setErrors] =useState({})
+
+  // state to check it contains any error 
+  const [formHasErrors, setFormHasErrors] = useState(false);
+
+
 
   // to get data from input fields
   const handleChange=(e)=>{
@@ -34,8 +42,52 @@ const Employee = () => {
     }))
   }
 
+  // **********function to validate form **********
 
-  // state for submit loading
+  const validateForm =()=>{
+    // create a temporary object to hold errors
+    const newErrors ={}
+    
+    if(!formData.name.trim()){
+      newErrors.name('Name is required!!')   //trim() will remove those spaces, so we can check if the name is not empty (or just spaces).
+    }else if(!/^[A-Za-z\s]+$/.test(formData.name)){
+      newErrors.name ='Name should only contain letters!!'
+    }
+
+    if(!formData.phoneNumber.trim() || formData.phoneNumber.length !==10){
+      newErrors.phoneNumber ='Enter a valid 10-digit phone number!!'
+    }
+
+    if(!formData.age.trim() || formData.age<=0){
+      newErrors.age ='Enter a valid age!!'
+    }
+    if(!formData.maritalStatus.trim()){
+      newErrors.maritalStatus ='Marital status is required!!'
+    }
+
+    if(!formData.job.trim()){
+      newErrors.job ='Job is required!!'
+    }else if(!/^[A-Za-z\s]+$/.test(formData.job)){
+      newErrors.job ='Job should only contain letters!!'
+    }
+
+      // update the error state with newerror object
+      setErrors(newErrors)
+
+      // check it contains any error or not
+      setFormHasErrors(Object.keys(newErrors).length > 0);
+
+      // check it contains any error by checking the newerror object is empty or not
+      // if it is empty , it contains no error . otherwise it contains error
+
+      return Object.keys(newErrors).length ===0;  //returns if no error
+
+
+  }
+
+
+
+  // ***********state for submit loading**********
   const [loadingSubmit , setLoadingSubmit] =useState(false)
 
   // function to save data
@@ -45,6 +97,12 @@ const Employee = () => {
 
     setLoadingSubmit(true)
     console.log(formData);
+
+    // check validation
+    if(!validateForm()){
+      setLoadingSubmit(false)
+      return
+    }
      
     if(editMode){
         
@@ -83,7 +141,7 @@ const Employee = () => {
   }
 
  
-  // state for shimmereffect
+  // ********state for shimmereffect************
 const [employeeLoading, setEmployeeLoading] =useState(false)
 
 // /function to display data
@@ -195,57 +253,74 @@ useEffect(()=>{
        <div className='home'>
          
          {/* container to enter details */}
-          <div className='container mt-5'>
+          <div  className={`container mt-5 ${formHasErrors ? 'container-error' : 'container'}`}>
           
              {/* forms */}
              <form action="" className='form'>
-                  <label htmlFor="">Full Name</label>
-                  <input type="text" placeholder='Enter your name' name="name" value={formData.name} onChange={handleChange} />
+            
+                    <label htmlFor="">Full Name</label>
+                    <input type="text" placeholder='Enter your name' name="name" value={formData.name} onChange={handleChange} />
   
-                  <label htmlFor="">Phone Number</label>
-                  <input type="number" placeholder='Enter your phone number'  name="phoneNumber" value={formData.phoneNumber} onChange={handleChange}/>
-  
-                  <label htmlFor="">Gender</label>
-                  <div className='gender'>
-                       <label htmlFor=""><input type="radio" name='gender' value="Male" checked={formData.gender==='Male'} onChange={handleChange} defaultChecked/>Male</label>
-                      <label htmlFor=""><input type="radio" name='gender' value="female" checked={formData.gender==='female'} onChange={handleChange}  />Female</label>
-                      <label htmlFor=""><input type="radio" name='gender' value="others" checked={formData.gender==='others'} onChange={handleChange} />Other</label> 
-                  </div>
-  
-                  <label htmlFor="maritalStatus" className="status">Marital status</label>
-                      <select name="maritalStatus" value={formData.maritalStatus} onChange={handleChange} id="">
-                          <option value="">Select</option>
-                          <option value="married">Married</option>
-                          <option value="unmarried">Unmarried</option>
-                      </select>
-                  
-                  <label htmlFor="">Age</label>
-                  <input type="number" placeholder='Enter your age' name="age" value={formData.age} onChange={handleChange}/>
-                  
-                  <label htmlFor="">Job</label>
-                  <input type="text" placeholder='Enter your job' name='job' value={formData.job} onChange={handleChange} />
-  
-                  
-                  <div className='btn1'>
+                    {/* show validation error message */}
+                    {errors.name && <p className="error-message">{errors.name}</p> } 
+    
+                    <label htmlFor="">Phone Number</label>
+                    <input type="number" placeholder='Enter your phone number'  name="phoneNumber" value={formData.phoneNumber} onChange={handleChange}/>
                     
-                    <button className='btnSub' type='submit' onClick={handleSubmit}>
-                      {
-                        loadingSubmit?(
-                          <CircularProgress size={24} style={{ color: '#fff' }} />
-                        ) : (
-                          editMode ? "Update" : "Submit"
-                        )
-                      }
-                    </button>
-                    <button className='btnCan' onClick={clearForm}>Cancel</button>
+                    {/* show validation error message */}
+                    {errors.phoneNumber && <p className="error-message">{errors.phoneNumber}</p> } 
+  
+                    <label htmlFor="">Gender</label>
+                    <div className='gender'>
+                         <label htmlFor=""><input type="radio" name='gender' value="Male" checked={formData.gender==='Male'} onChange={handleChange} defaultChecked/>Male</label>
+                        <label htmlFor=""><input type="radio" name='gender' value="female" checked={formData.gender==='female'} onChange={handleChange}  />Female</label>
+                        <label htmlFor=""><input type="radio" name='gender' value="others" checked={formData.gender==='others'} onChange={handleChange} />Other</label> 
+                    </div>
+    
+                    <label htmlFor="maritalStatus" className="status">Marital status</label>
+                        <select name="maritalStatus" value={formData.maritalStatus} onChange={handleChange} id="">
+                            <option value="">Select</option>
+                            <option value="married">Married</option>
+                            <option value="unmarried">Unmarried</option>
+                        </select>
+  
+                        {/* show validation error message */}
+                    {errors.maritalStatus && <p className="error-message">{errors.maritalStatus}</p> } 
                     
-                  </div>
+                    <label htmlFor="">Age</label>
+                    <input type="number" placeholder='Enter your age' name="age" value={formData.age} onChange={handleChange}/>
+  
+                    {/* show validation error message */}
+                    {errors.age && <p className="error-message">{errors.age}</p> } 
+                    
+                    <label htmlFor="">Job</label>
+                    <input type="text" placeholder='Enter your job' name='job' value={formData.job} onChange={handleChange} />
+                    
+  
+                    {/* show validation error message */}
+                    {errors.job && <p className="error-message">{errors.job}</p> } 
+                    
+                    <div className='btn1'>
+                      
+                      <button className='btnSub' type='submit' onClick={handleSubmit}>
+                        {
+                          loadingSubmit?(
+                            <CircularProgress size={24} style={{ color: '#fff' }} />
+                          ) : (
+                            editMode ? "Update" : "Submit"
+                          )
+                        }
+                      </button>
+                      <button className='btnCan' onClick={clearForm}>Cancel</button>
+                      
+                    </div>
+               
               </form>
            
          </div>
   
         <div className='details'>
-        {employeeLoading ==false? (
+        {employeeLoading ? (
           <div className="allDetails">
             {Array(5)
               .fill()

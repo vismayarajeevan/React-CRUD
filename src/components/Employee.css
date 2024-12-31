@@ -57,6 +57,11 @@
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
+.container-error {
+     height: 800px;/* Increase the width when there are errors */
+  }
+  
+
 .form{
     display: flex;
     flex-direction: column;
@@ -203,33 +208,48 @@ select{
   }
   
 
-  .editBtn{
+
+  .editBtn, .deleteBtn {
     background-color: #ffd700;
     color: black;
     padding: 7px;
     border: none;
     border-radius: 3px;
+    font-size: 14px; /* Default font size */
+    display: inline-flex; /* Ensures alignment of icon and text */
+    align-items: center;
+    justify-content: center;
   }
-  .editBtn:hover{
+  
+  .editBtn:hover {
     background-color: #f7d514;
     color: black;
   }
-
-  .deleteBtn{
+  
+  .deleteBtn {
     background-color: #ff4444;
     color: white;
     padding: 7px;
     border: none;
     border-radius: 3px;
+    font-size: 14px; /* Default font size */
+    display: inline-flex; /* Ensures alignment of icon and text */
+    align-items: center;
+    justify-content: center;
   }
-
-  .deleteBtn:hover{
+  
+  .deleteBtn:hover {
     background-color: #d42929;
     color: white;
   }
 
 
-
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
 
 /***************** Shimmer effect ******************/
 .shimmer {
@@ -270,6 +290,16 @@ select{
   
   
 /* ********************Responsive design********************** */
+
+@media (max-width: 1280px){
+    .container{
+        width: 90%;
+    }
+    .details{
+        width: 90%;
+    }
+}
+
   
 @media (max-width: 760px){
     .head h1{
@@ -340,10 +370,13 @@ select{
         font-size: 12px;
         font-weight: 600;
     }
-    .editBtn{
+    /* .editBtn{
         padding: 3px;
-    }
+    } */
     .editBtn i{
+        font-size: 10px;
+    }
+    .deleteBtn{
         font-size: 10px;
     }
     
