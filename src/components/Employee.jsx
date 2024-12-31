@@ -54,7 +54,10 @@ const Employee = () => {
       newErrors.name ='Name should only contain letters!!'
     }
 
-    if (!formData.phoneNumber || formData.phoneNumber.length !== 10) {
+   
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = 'Phone number is required!!';
+    } else if (!/^\d{10}$/.test(formData.phoneNumber)) {
       newErrors.phoneNumber = 'Enter a valid 10-digit phone number!!';
     }
 
@@ -229,7 +232,7 @@ const fillDataToForm =(id)=>{
   if(employeeId){
     setFormData({
       name:employeeId.name,
-      phoneNumber:employeeId.phoneNumber,
+      phoneNumber:employeeId.phoneNumber.toString(), //convert to string
       age:employeeId.age,
       gender:employeeId.gender,
       maritalStatus:employeeId.maritalStatus,
