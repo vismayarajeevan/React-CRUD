@@ -49,16 +49,19 @@ const Employee = () => {
     const newErrors ={}
     
     if(!formData.name.trim()){
-      newErrors.name('Name is required!!')   //trim() will remove those spaces, so we can check if the name is not empty (or just spaces).
+      newErrors.name='Name is required!!'   //trim() will remove those spaces, so we can check if the name is not empty (or just spaces).
     }else if(!/^[A-Za-z\s]+$/.test(formData.name)){
       newErrors.name ='Name should only contain letters!!'
     }
 
-    if(!formData.phoneNumber.trim() || formData.phoneNumber.length !==10){
-      newErrors.phoneNumber ='Enter a valid 10-digit phone number!!'
+    if (!formData.phoneNumber || formData.phoneNumber.length !== 10) {
+      newErrors.phoneNumber = 'Enter a valid 10-digit phone number!!';
     }
 
-    if(!formData.age.trim() || formData.age<=0){
+    
+    
+
+    if(!formData.age || formData.age<=0){
       newErrors.age ='Enter a valid age!!'
     }
     if(!formData.maritalStatus.trim()){
@@ -106,7 +109,7 @@ const Employee = () => {
      
     if(editMode){
         
-      updateDetails(editId,formData)
+      await updateDetails(editId,formData)
       
     }else{
       
@@ -121,8 +124,11 @@ const Employee = () => {
              console.log(error);
              
       }   
+      finally {
+        setLoadingSubmit(false); // Ensure cleanup
+      }
       
-      setLoadingSubmit(false)
+      
     }
     
     
@@ -207,7 +213,11 @@ const updateDetails =async(id,updateData)=>{
   console.log(error);
   
  }
- setLoadingSubmit(false)
+ finally {
+  // Ensure loadingSubmit is reset regardless of success or error
+  setLoadingSubmit(false);
+}
+
 }
 
 

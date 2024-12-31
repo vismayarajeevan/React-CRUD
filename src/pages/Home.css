@@ -27,6 +27,23 @@
     color: var(--primary-color);
   }
   
+  
+
+  @media(max-width:760px){
+    .contact-card {
+      width: 400px;
+      height: 260px;
+   
+    }
+    .contact-card h3 {
+      margin-bottom: 0.8rem;
+      font-size: 18px;
+      
+    }
+    .para{
+      font-size: 14px;
+    }
+  }
 
   @media(max-width:480px){
     .contact-card {
